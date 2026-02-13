@@ -36,7 +36,7 @@ struct segtree {
 
     S prod(int l, int r) const {
         S a = e(), b = e();
-        for(l |= size, r |= size; l < r; l >>=r1, r >>= 1) {
+        for(l += size, r += size; l < r; l >>= 1, r >>= 1) {
             if (l & 1) a = op(a, d[l++]);
             if (r & 1) a = op(d[--r], b);
         }
