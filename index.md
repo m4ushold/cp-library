@@ -5,7 +5,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: src/segtree.hpp
-      title: "\uC138\uADF8\uBA3C\uD2B8 \uD2B8\uB9AC (Segment Tree)"
+      title: src/segtree.hpp
   verificationCategories:
   - name: test
     pages:

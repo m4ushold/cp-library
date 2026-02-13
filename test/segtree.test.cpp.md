@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
     path: src/segtree.hpp
-    title: "\uC138\uADF8\uBA3C\uD2B8 \uD2B8\uB9AC (Segment Tree)"
+    title: src/segtree.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -16,15 +16,8 @@ data:
     - https://judge.yosupo.jp/problem/point_add_range_sum
   bundledCode: "#line 1 \"test/segtree.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/point_add_range_sum\"\
     \n\n#include <iostream>\n#line 2 \"src/segtree.hpp\"\n#include <vector>\n#include\
-    \ <functional>\n\n/**\n * @brief \uC138\uADF8\uBA3C\uD2B8 \uD2B8\uB9AC (Segment\
-    \ Tree)\n * @docs docs/segtree.md  <-- (\uC120\uD0DD\uC0AC\uD56D) \uC124\uBA85\
-    \uC774 \uAE38\uBA74 \uBCC4\uB3C4 md \uD30C\uC77C\uB85C \uBE84 \uC218\uB3C4 \uC788\
-    \uC74C\n * * \uC810 \uC5C5\uB370\uC774\uD2B8(Point Update)\uC640 \uAD6C\uAC04\
-    \ \uCFFC\uB9AC(Range Query)\uB97C O(log N)\uC5D0 \uCC98\uB9AC\uD569\uB2C8\uB2E4\
-    .\n * * @tparam S \uC5F0\uC0B0\uD560 \uD0C0\uC785\n * @tparam op \uC5F0\uC0B0\
-    \ \uD568\uC218 (Binary Operation)\n * @tparam e \uD56D\uB4F1\uC6D0 \uD568\uC218\
-    \ (Identity Element)\n */\ntemplate <class S, S (*op)(S, S), S (*e)()>\nstruct\
-    \ segtree {\n  public:\n    segtree() : segtree(0) {}\n    explicit segtree(int\
+    \ <functional>\n\n// @snippet segtree\ntemplate <class S, S (*op)(S, S), S (*e)()>\n\
+    struct segtree {\n  public:\n    segtree() : segtree(0) {}\n    explicit segtree(int\
     \ n) : segtree(std::vector<S>(n, e())) {}\n    explicit segtree(const std::vector<S>&\
     \ v) : _n(int(v.size())) {\n        log = 0;\n        while ((1U << log) < (unsigned\
     \ int)(_n)) log++;\n        size = 1 << log;\n        d = std::vector<S>(2 * size,\
@@ -57,7 +50,7 @@ data:
   isVerificationFile: true
   path: test/segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-02-13 16:48:05+09:00'
+  timestamp: '2026-02-13 17:05:27+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/segtree.test.cpp
