@@ -38,7 +38,7 @@ struct segtree {
         S a = e(), b = e();
         for(l += size, r += size; l < r; l >>= 1, r >>= 1) {
             if (l & 1) a = op(a, d[l++]);
-            if (r & 1) a = op(d[--r], b);
+            if (r & 1) b = op(d[--r], b);
         }
         return op(a, b);
     }
