@@ -2,14 +2,7 @@
 #include <vector>
 #include <functional>
 
-/**
- * @brief 세그먼트 트리 (Segment Tree)
- * @docs docs/segtree.md  <-- (선택사항) 설명이 길면 별도 md 파일로 뺄 수도 있음
- * * 점 업데이트(Point Update)와 구간 쿼리(Range Query)를 O(log N)에 처리합니다.
- * * @tparam S 연산할 타입
- * @tparam op 연산 함수 (Binary Operation)
- * @tparam e 항등원 함수 (Identity Element)
- */
+// @snippet segtree
 template <class S, S (*op)(S, S), S (*e)()>
 struct segtree {
   public:
