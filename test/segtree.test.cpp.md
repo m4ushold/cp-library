@@ -32,19 +32,18 @@ data:
     \ (int i = size - 1; i >= 1; i--) update(i);\n    }\n\n    void set(int p, S x)\
     \ {\n        p += size;\n        d[p] = x;\n        for (int i = 1; i <= log;\
     \ i++) update(p >> i);\n    }\n\n    S get(int p) const {\n        return d[p\
-    \ + size];\n    }\n\n    S prod(int l, int r) const {\n        S sml = e(), smr\
-    \ = e();\n        l += size;\n        r += size;\n        while (l < r) {\n  \
-    \          if (l & 1) sml = op(sml, d[l++]);\n            if (r & 1) smr = op(d[--r],\
-    \ smr);\n            l >>= 1;\n            r >>= 1;\n        }\n        return\
-    \ op(sml, smr);\n    }\n\n  private:\n    int _n, size, log;\n    std::vector<S>\
-    \ d;\n    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }\n};\n#line\
-    \ 5 \"test/segtree.test.cpp\"\n\nusing namespace std;\nusing ll = long long;\n\
-    \nll op(ll a, ll b) { return a + b; }\nll e() { return 0; }\n\nint main() {\n\
-    \    cin.tie(0)->sync_with_stdio(0);\n    int n,q; cin >> n >> q;\n    vector<ll>\
-    \ v(n);\n    for(ll &i:v) cin >> i;\n\n    segtree<ll,op,e> seg(v);\n    for(int\
-    \ i=0;i<q;i++) {\n        ll a,b,c; cin >> a >> b >> c;\n        if(a == 0) seg.set(b,seg.get(b)\
-    \ + c);\n        else cout << seg.prod(b,c) << '\\n';\n    }\n    return 0;\n\
-    }\n"
+    \ + size];\n    }\n\n    S prod(int l, int r) const {\n        S a = e(), b =\
+    \ e();\n        for(l += size, r += size; l < r; l >>= 1, r >>= 1) {\n       \
+    \     if (l & 1) a = op(a, d[l++]);\n            if (r & 1) b = op(d[--r], b);\n\
+    \        }\n        return op(a, b);\n    }\n\n  private:\n    int _n, size, log;\n\
+    \    std::vector<S> d;\n    void update(int k) { d[k] = op(d[2 * k], d[2 * k +\
+    \ 1]); }\n};\n#line 5 \"test/segtree.test.cpp\"\n\nusing namespace std;\nusing\
+    \ ll = long long;\n\nll op(ll a, ll b) { return a + b; }\nll e() { return 0; }\n\
+    \nint main() {\n    cin.tie(0)->sync_with_stdio(0);\n    int n,q; cin >> n >>\
+    \ q;\n    vector<ll> v(n);\n    for(ll &i:v) cin >> i;\n\n    segtree<ll,op,e>\
+    \ seg(v);\n    for(int i=0;i<q;i++) {\n        ll a,b,c; cin >> a >> b >> c;\n\
+    \        if(a == 0) seg.set(b,seg.get(b) + c);\n        else cout << seg.prod(b,c)\
+    \ << '\\n';\n    }\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/point_add_range_sum\"\n\
     \n#include <iostream>\n#include \"../src/segtree.hpp\"\n\nusing namespace std;\n\
     using ll = long long;\n\nll op(ll a, ll b) { return a + b; }\nll e() { return\
@@ -58,7 +57,7 @@ data:
   isVerificationFile: true
   path: test/segtree.test.cpp
   requiredBy: []
-  timestamp: '2026-02-13 14:27:17+09:00'
+  timestamp: '2026-02-13 16:48:05+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/segtree.test.cpp

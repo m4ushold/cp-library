@@ -32,12 +32,11 @@ data:
     \ - 1; i >= 1; i--) update(i);\n    }\n\n    void set(int p, S x) {\n        p\
     \ += size;\n        d[p] = x;\n        for (int i = 1; i <= log; i++) update(p\
     \ >> i);\n    }\n\n    S get(int p) const {\n        return d[p + size];\n   \
-    \ }\n\n    S prod(int l, int r) const {\n        S sml = e(), smr = e();\n   \
-    \     l += size;\n        r += size;\n        while (l < r) {\n            if\
-    \ (l & 1) sml = op(sml, d[l++]);\n            if (r & 1) smr = op(d[--r], smr);\n\
-    \            l >>= 1;\n            r >>= 1;\n        }\n        return op(sml,\
-    \ smr);\n    }\n\n  private:\n    int _n, size, log;\n    std::vector<S> d;\n\
-    \    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }\n};\n"
+    \ }\n\n    S prod(int l, int r) const {\n        S a = e(), b = e();\n       \
+    \ for(l += size, r += size; l < r; l >>= 1, r >>= 1) {\n            if (l & 1)\
+    \ a = op(a, d[l++]);\n            if (r & 1) b = op(d[--r], b);\n        }\n \
+    \       return op(a, b);\n    }\n\n  private:\n    int _n, size, log;\n    std::vector<S>\
+    \ d;\n    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }\n};\n"
   code: "#pragma once\n#include <vector>\n#include <functional>\n\n/**\n * @brief\
     \ \uC138\uADF8\uBA3C\uD2B8 \uD2B8\uB9AC (Segment Tree)\n * @docs docs/segtree.md\
     \  <-- (\uC120\uD0DD\uC0AC\uD56D) \uC124\uBA85\uC774 \uAE38\uBA74 \uBCC4\uB3C4\
@@ -55,17 +54,16 @@ data:
     \ i >= 1; i--) update(i);\n    }\n\n    void set(int p, S x) {\n        p += size;\n\
     \        d[p] = x;\n        for (int i = 1; i <= log; i++) update(p >> i);\n \
     \   }\n\n    S get(int p) const {\n        return d[p + size];\n    }\n\n    S\
-    \ prod(int l, int r) const {\n        S sml = e(), smr = e();\n        l += size;\n\
-    \        r += size;\n        while (l < r) {\n            if (l & 1) sml = op(sml,\
-    \ d[l++]);\n            if (r & 1) smr = op(d[--r], smr);\n            l >>= 1;\n\
-    \            r >>= 1;\n        }\n        return op(sml, smr);\n    }\n\n  private:\n\
-    \    int _n, size, log;\n    std::vector<S> d;\n    void update(int k) { d[k]\
-    \ = op(d[2 * k], d[2 * k + 1]); }\n};"
+    \ prod(int l, int r) const {\n        S a = e(), b = e();\n        for(l += size,\
+    \ r += size; l < r; l >>= 1, r >>= 1) {\n            if (l & 1) a = op(a, d[l++]);\n\
+    \            if (r & 1) b = op(d[--r], b);\n        }\n        return op(a, b);\n\
+    \    }\n\n  private:\n    int _n, size, log;\n    std::vector<S> d;\n    void\
+    \ update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }\n};"
   dependsOn: []
   isVerificationFile: false
   path: src/segtree.hpp
   requiredBy: []
-  timestamp: '2026-02-13 14:27:17+09:00'
+  timestamp: '2026-02-13 16:48:05+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/segtree.test.cpp
