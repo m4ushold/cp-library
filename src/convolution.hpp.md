@@ -7,6 +7,9 @@ data:
     path: test/convolution_and.test.cpp
     title: test/convolution_and.test.cpp
   - icon: ':heavy_check_mark:'
+    path: test/convolution_mod.test.cpp
+    title: test/convolution_mod.test.cpp
+  - icon: ':heavy_check_mark:'
     path: test/convolution_xor.test.cpp
     title: test/convolution_xor.test.cpp
   _isVerificationFailed: false
@@ -70,7 +73,38 @@ data:
     \ op> vector<ll> ConvFWHT(vector<ll> a, vector<ll> b, ll mod) {\n    int n = 1;\
     \ while (n < max(a.size(), b.size())) n <<= 1;\n    a.resize(n); b.resize(n);\n\
     \    FWHT<op>(a, 0, mod); FWHT<op>(b, 0, mod);\n    for (int i = 0; i < n; i++)\
-    \ a[i] = a[i] * b[i] % mod;\n    FWHT<op>(a, 1, mod);\n    return a;\n}\n"
+    \ a[i] = a[i] * b[i] % mod;\n    FWHT<op>(a, 1, mod);\n    return a;\n}\n\n//\
+    \ ================= [ NTT for 998244353 ] =================\n// 998244353 = 119\
+    \ * 2^23 + 1, Primitive Root = 3\n// 998,244,353 = 119 * 2^23 + 1, w 3 | 2,281,701,377\
+    \ = 17 * 2^27 + 1, w 3\n// 167,772,161 =  10 * 2^25 + 1, w 3 | 2,483,027,969 =\
+    \ 37 * 2^26 + 1, w 3\n// 469,762,049 =  26 * 2^26 + 1, w 3 | 2,013,265,921 = 15\
+    \ * 2^27 + 1, w 31\n\nconst ll MOD = 998244353;\nconst ll G = 3;\n\n// \uAC70\uB4ED\
+    \uC81C\uACF1 (Modular Exponentiation)\nll power(ll base, ll exp) {\n    ll res\
+    \ = 1;\n    base %= MOD;\n    while (exp > 0) {\n        if (exp % 2 == 1) res\
+    \ = (res * base) % MOD;\n        base = (base * base) % MOD;\n        exp /= 2;\n\
+    \    }\n    return res;\n}\n\n// \uBAA8\uB4C8\uB7EC \uC5ED\uC6D0 (Fermat's Little\
+    \ Theorem)\nll modInverse(ll n) {\n    return power(n, MOD - 2);\n}\n\n// NTT\
+    \ (Number Theoretic Transform)\nvoid NTT(vector<ll>& a, bool invert) {\n    int\
+    \ n = a.size();\n\n    // 1. Bit Reversal Permutation\n    for (int i = 1, j =\
+    \ 0; i < n; i++) {\n        int bit = n >> 1;\n        for (; j & bit; bit >>=\
+    \ 1) j ^= bit;\n        j ^= bit;\n        if (i < j) swap(a[i], a[j]);\n    }\n\
+    \n    // 2. Butterfly Operations\n    for (int len = 2; len <= n; len <<= 1) {\n\
+    \        ll wlen = power(G, (MOD - 1) / len);\n        if (invert) wlen = modInverse(wlen);\n\
+    \n        for (int i = 0; i < n; i += len) {\n            ll w = 1;\n        \
+    \    for (int j = 0; j < len / 2; j++) {\n                ll u = a[i + j];\n \
+    \               ll v = (a[i + j + len / 2] * w) % MOD;\n                a[i +\
+    \ j] = (u + v) % MOD;\n                a[i + j + len / 2] = (u - v + MOD) % MOD;\n\
+    \                w = (w * wlen) % MOD;\n            }\n        }\n    }\n\n  \
+    \  // 3. Inverse Scaling\n    if (invert) {\n        ll n_inv = modInverse(n);\n\
+    \        for (ll& x : a) x = (x * n_inv) % MOD;\n    }\n}\n\n// Convolution Function\n\
+    vector<ll> NTTConv(vector<ll> const& a, vector<ll> const& b) {\n    vector<ll>\
+    \ fa(a.begin(), a.end()), fb(b.begin(), b.end());\n    int n = 1;\n    while (n\
+    \ < a.size() + b.size()) n <<= 1;\n    \n    fa.resize(n);\n    fb.resize(n);\n\
+    \n    NTT(fa, false);\n    NTT(fb, false);\n    \n    for (int i = 0; i < n; i++)\n\
+    \        fa[i] = (fa[i] * fb[i]) % MOD;\n        \n    NTT(fa, true);\n\n    //\
+    \ \uBB38\uC81C \uC694\uAD6C\uC0AC\uD56D\uC5D0 \uB9DE\uCDB0 \uC0AC\uC774\uC988\
+    \ \uC870\uC808 (N + M - 1)\n    fa.resize(a.size() + b.size() - 1);\n    return\
+    \ fa;\n}\n"
   code: "#include <bits/stdc++.h>\nusing namespace std;\nusing ll = long long;\n\n\
     // ================= [ 0. Common & FFT Base ] =================\nusing real_t\
     \ = double;\nusing cpx = complex<real_t>;\nconst real_t PI = acos(-1);\nvoid FFT(vector<cpx>\
@@ -127,14 +161,45 @@ data:
     \ b, ll mod) {\n    int n = 1; while (n < max(a.size(), b.size())) n <<= 1;\n\
     \    a.resize(n); b.resize(n);\n    FWHT<op>(a, 0, mod); FWHT<op>(b, 0, mod);\n\
     \    for (int i = 0; i < n; i++) a[i] = a[i] * b[i] % mod;\n    FWHT<op>(a, 1,\
-    \ mod);\n    return a;\n}\n"
+    \ mod);\n    return a;\n}\n\n// ================= [ NTT for 998244353 ] =================\n\
+    // 998244353 = 119 * 2^23 + 1, Primitive Root = 3\n// 998,244,353 = 119 * 2^23\
+    \ + 1, w 3 | 2,281,701,377 = 17 * 2^27 + 1, w 3\n// 167,772,161 =  10 * 2^25 +\
+    \ 1, w 3 | 2,483,027,969 = 37 * 2^26 + 1, w 3\n// 469,762,049 =  26 * 2^26 + 1,\
+    \ w 3 | 2,013,265,921 = 15 * 2^27 + 1, w 31\n\nconst ll MOD = 998244353;\nconst\
+    \ ll G = 3;\n\n// \uAC70\uB4ED\uC81C\uACF1 (Modular Exponentiation)\nll power(ll\
+    \ base, ll exp) {\n    ll res = 1;\n    base %= MOD;\n    while (exp > 0) {\n\
+    \        if (exp % 2 == 1) res = (res * base) % MOD;\n        base = (base * base)\
+    \ % MOD;\n        exp /= 2;\n    }\n    return res;\n}\n\n// \uBAA8\uB4C8\uB7EC\
+    \ \uC5ED\uC6D0 (Fermat's Little Theorem)\nll modInverse(ll n) {\n    return power(n,\
+    \ MOD - 2);\n}\n\n// NTT (Number Theoretic Transform)\nvoid NTT(vector<ll>& a,\
+    \ bool invert) {\n    int n = a.size();\n\n    // 1. Bit Reversal Permutation\n\
+    \    for (int i = 1, j = 0; i < n; i++) {\n        int bit = n >> 1;\n       \
+    \ for (; j & bit; bit >>= 1) j ^= bit;\n        j ^= bit;\n        if (i < j)\
+    \ swap(a[i], a[j]);\n    }\n\n    // 2. Butterfly Operations\n    for (int len\
+    \ = 2; len <= n; len <<= 1) {\n        ll wlen = power(G, (MOD - 1) / len);\n\
+    \        if (invert) wlen = modInverse(wlen);\n\n        for (int i = 0; i < n;\
+    \ i += len) {\n            ll w = 1;\n            for (int j = 0; j < len / 2;\
+    \ j++) {\n                ll u = a[i + j];\n                ll v = (a[i + j +\
+    \ len / 2] * w) % MOD;\n                a[i + j] = (u + v) % MOD;\n          \
+    \      a[i + j + len / 2] = (u - v + MOD) % MOD;\n                w = (w * wlen)\
+    \ % MOD;\n            }\n        }\n    }\n\n    // 3. Inverse Scaling\n    if\
+    \ (invert) {\n        ll n_inv = modInverse(n);\n        for (ll& x : a) x = (x\
+    \ * n_inv) % MOD;\n    }\n}\n\n// Convolution Function\nvector<ll> NTTConv(vector<ll>\
+    \ const& a, vector<ll> const& b) {\n    vector<ll> fa(a.begin(), a.end()), fb(b.begin(),\
+    \ b.end());\n    int n = 1;\n    while (n < a.size() + b.size()) n <<= 1;\n  \
+    \  \n    fa.resize(n);\n    fb.resize(n);\n\n    NTT(fa, false);\n    NTT(fb,\
+    \ false);\n    \n    for (int i = 0; i < n; i++)\n        fa[i] = (fa[i] * fb[i])\
+    \ % MOD;\n        \n    NTT(fa, true);\n\n    // \uBB38\uC81C \uC694\uAD6C\uC0AC\
+    \uD56D\uC5D0 \uB9DE\uCDB0 \uC0AC\uC774\uC988 \uC870\uC808 (N + M - 1)\n    fa.resize(a.size()\
+    \ + b.size() - 1);\n    return fa;\n}\n"
   dependsOn: []
   isVerificationFile: false
   path: src/convolution.hpp
   requiredBy: []
-  timestamp: '2026-02-16 18:37:01+09:00'
+  timestamp: '2026-02-16 19:30:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test/convolution_mod.test.cpp
   - test/convolution_and.test.cpp
   - test/convolution_xor.test.cpp
 documentation_of: src/convolution.hpp

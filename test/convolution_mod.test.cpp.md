@@ -11,10 +11,10 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/bitwise_and_convolution
+    PROBLEM: https://judge.yosupo.jp/problem/convolution_mod
     links:
-    - https://judge.yosupo.jp/problem/bitwise_and_convolution
-  bundledCode: "#line 1 \"test/convolution_and.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/bitwise_and_convolution\"\
+    - https://judge.yosupo.jp/problem/convolution_mod
+  bundledCode: "#line 1 \"test/convolution_mod.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/convolution_mod\"\
     \n\n#include <bits/stdc++.h>\n#line 2 \"src/convolution.hpp\"\nusing namespace\
     \ std;\nusing ll = long long;\n\n// ================= [ 0. Common & FFT Base ]\
     \ =================\nusing real_t = double;\nusing cpx = complex<real_t>;\nconst\
@@ -102,29 +102,29 @@ data:
     \        fa[i] = (fa[i] * fb[i]) % MOD;\n        \n    NTT(fa, true);\n\n    //\
     \ \uBB38\uC81C \uC694\uAD6C\uC0AC\uD56D\uC5D0 \uB9DE\uCDB0 \uC0AC\uC774\uC988\
     \ \uC870\uC808 (N + M - 1)\n    fa.resize(a.size() + b.size() - 1);\n    return\
-    \ fa;\n}\n#line 5 \"test/convolution_and.test.cpp\"\n\nusing namespace std;\n\
+    \ fa;\n}\n#line 5 \"test/convolution_mod.test.cpp\"\n\nusing namespace std;\n\
     using ll = long long;\n\nint main() {\n  cin.tie(0)->sync_with_stdio(0);\n  int\
-    \ n; cin >> n;\n  vector<ll> a(1<<n), b(1<<n);\n  for(ll &i:a) cin >> i;\n  for(ll\
-    \ &i:b) cin >> i;\n  for(auto i:ConvFWHT<'&'>(a,b,998'244'353)) cout << i << '\
-    \ ';\n  return 0;\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/bitwise_and_convolution\"\
-    \n\n#include <bits/stdc++.h>\n#include \"../src/convolution.hpp\"\n\nusing namespace\
-    \ std;\nusing ll = long long;\n\nint main() {\n  cin.tie(0)->sync_with_stdio(0);\n\
-    \  int n; cin >> n;\n  vector<ll> a(1<<n), b(1<<n);\n  for(ll &i:a) cin >> i;\n\
-    \  for(ll &i:b) cin >> i;\n  for(auto i:ConvFWHT<'&'>(a,b,998'244'353)) cout <<\
-    \ i << ' ';\n  return 0;\n}\n"
+    \ n,m; cin >> n >> m;\n  vector<ll> a(n), b(m);\n  for(ll &i:a) cin >> i;\n  for(ll\
+    \ &i:b) cin >> i;\n  for(auto i:NTTConv(a,b)) cout << i << ' ';\n  return 0;\n\
+    }\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/convolution_mod\"\n\n#include\
+    \ <bits/stdc++.h>\n#include \"../src/convolution.hpp\"\n\nusing namespace std;\n\
+    using ll = long long;\n\nint main() {\n  cin.tie(0)->sync_with_stdio(0);\n  int\
+    \ n,m; cin >> n >> m;\n  vector<ll> a(n), b(m);\n  for(ll &i:a) cin >> i;\n  for(ll\
+    \ &i:b) cin >> i;\n  for(auto i:NTTConv(a,b)) cout << i << ' ';\n  return 0;\n\
+    }\n"
   dependsOn:
   - src/convolution.hpp
   isVerificationFile: true
-  path: test/convolution_and.test.cpp
+  path: test/convolution_mod.test.cpp
   requiredBy: []
   timestamp: '2026-02-16 19:30:20+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test/convolution_and.test.cpp
+documentation_of: test/convolution_mod.test.cpp
 layout: document
 redirect_from:
-- /verify/test/convolution_and.test.cpp
-- /verify/test/convolution_and.test.cpp.html
-title: test/convolution_and.test.cpp
+- /verify/test/convolution_mod.test.cpp
+- /verify/test/convolution_mod.test.cpp.html
+title: test/convolution_mod.test.cpp
 ---

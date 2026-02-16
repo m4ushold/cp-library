@@ -21,6 +21,9 @@ data:
       path: test/convolution_and.test.cpp
       title: test/convolution_and.test.cpp
     - icon: ':heavy_check_mark:'
+      path: test/convolution_mod.test.cpp
+      title: test/convolution_mod.test.cpp
+    - icon: ':heavy_check_mark:'
       path: test/convolution_xor.test.cpp
       title: test/convolution_xor.test.cpp
     - icon: ':heavy_check_mark:'
