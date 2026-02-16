@@ -116,3 +116,87 @@ template<char op> vector<ll> ConvFWHT(vector<ll> a, vector<ll> b, ll mod) {
     FWHT<op>(a, 1, mod);
     return a;
 }
+
+// ================= [ NTT for 998244353 ] =================
+// 998244353 = 119 * 2^23 + 1, Primitive Root = 3
+// 998,244,353 = 119 * 2^23 + 1, w 3 | 2,281,701,377 = 17 * 2^27 + 1, w 3
+// 167,772,161 =  10 * 2^25 + 1, w 3 | 2,483,027,969 = 37 * 2^26 + 1, w 3
+// 469,762,049 =  26 * 2^26 + 1, w 3 | 2,013,265,921 = 15 * 2^27 + 1, w 31
+
+const ll MOD = 998244353;
+const ll G = 3;
+
+// 거듭제곱 (Modular Exponentiation)
+ll power(ll base, ll exp) {
+    ll res = 1;
+    base %= MOD;
+    while (exp > 0) {
+        if (exp % 2 == 1) res = (res * base) % MOD;
+        base = (base * base) % MOD;
+        exp /= 2;
+    }
+    return res;
+}
+
+// 모듈러 역원 (Fermat's Little Theorem)
+ll modInverse(ll n) {
+    return power(n, MOD - 2);
+}
+
+// NTT (Number Theoretic Transform)
+void NTT(vector<ll>& a, bool invert) {
+    int n = a.size();
+
+    // 1. Bit Reversal Permutation
+    for (int i = 1, j = 0; i < n; i++) {
+        int bit = n >> 1;
+        for (; j & bit; bit >>= 1) j ^= bit;
+        j ^= bit;
+        if (i < j) swap(a[i], a[j]);
+    }
+
+    // 2. Butterfly Operations
+    for (int len = 2; len <= n; len <<= 1) {
+        ll wlen = power(G, (MOD - 1) / len);
+        if (invert) wlen = modInverse(wlen);
+
+        for (int i = 0; i < n; i += len) {
+            ll w = 1;
+            for (int j = 0; j < len / 2; j++) {
+                ll u = a[i + j];
+                ll v = (a[i + j + len / 2] * w) % MOD;
+                a[i + j] = (u + v) % MOD;
+                a[i + j + len / 2] = (u - v + MOD) % MOD;
+                w = (w * wlen) % MOD;
+            }
+        }
+    }
+
+    // 3. Inverse Scaling
+    if (invert) {
+        ll n_inv = modInverse(n);
+        for (ll& x : a) x = (x * n_inv) % MOD;
+    }
+}
+
+// Convolution Function
+vector<ll> NTTConv(vector<ll> const& a, vector<ll> const& b) {
+    vector<ll> fa(a.begin(), a.end()), fb(b.begin(), b.end());
+    int n = 1;
+    while (n < a.size() + b.size()) n <<= 1;
+    
+    fa.resize(n);
+    fb.resize(n);
+
+    NTT(fa, false);
+    NTT(fb, false);
+    
+    for (int i = 0; i < n; i++)
+        fa[i] = (fa[i] * fb[i]) % MOD;
+        
+    NTT(fa, true);
+
+    // 문제 요구사항에 맞춰 사이즈 조절 (N + M - 1)
+    fa.resize(a.size() + b.size() - 1);
+    return fa;
+}
