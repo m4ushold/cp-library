@@ -5,39 +5,39 @@
 // @snippet segtree
 template <class S, S (*op)(S, S), S (*e)()>
 struct segtree {
-  public:
-    segtree() : segtree(0) {}
-    explicit segtree(int n) : segtree(std::vector<S>(n, e())) {}
-    explicit segtree(const std::vector<S>& v) : _n(int(v.size())) {
-        log = 0;
-        while ((1U << log) < (unsigned int)(_n)) log++;
-        size = 1 << log;
-        d = std::vector<S>(2 * size, e());
-        for (int i = 0; i < _n; i++) d[size + i] = v[i];
-        for (int i = size - 1; i >= 1; i--) update(i);
-    }
+  int _n, size, log;
+  std::vector<S> d;
 
-    void set(int p, S x) {
-        p += size;
-        d[p] = x;
-        for (int i = 1; i <= log; i++) update(p >> i);
-    }
+  segtree(int n) : segtree(std::vector<S>(n, e())) {}
+  segtree(const std::vector<S> &v) : _n(v.size()), size(1), log(0) {
+    while(size < _n) size <<= 1, ++log;
+    d = std::vector<S>(size << 1, e());
+    for(int i = 0; i < _n; i++) d[size + i] = v[i];
+    for(int i = size - 1; i; i--) update(i);
+  }
 
-    S get(int p) const {
-        return d[p + size];
-    }
+  void update(int i) {d[i] = op(d[i<<1], d[i<<1|1]);}
 
-    S prod(int l, int r) const {
-        S a = e(), b = e();
-        for(l += size, r += size; l < r; l >>= 1, r >>= 1) {
-            if (l & 1) a = op(a, d[l++]);
-            if (r & 1) b = op(d[--r], b);
-        }
-        return op(a, b);
-    }
+  void set(int i, S x) {
+    i += size;
+    d[i] = x;
+    while(i >>= 1) update(i);
+  }
 
-  private:
-    int _n, size, log;
-    std::vector<S> d;
-    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+  S get(int i) {
+    return d[size + i];
+  }
+
+  S prod(int l, int r) {
+    S a = e(), b = e();
+    for(l += size, r += size; l < r; l >>= 1, r >>= 1) {
+      if(l & 1) a = op(a, d[l++]);
+      if(r & 1) b = op(d[--r], b);
+    }
+    return op(a,b);
+  }
+
+  S all_prod() {
+    return d[1];
+  }
 };
