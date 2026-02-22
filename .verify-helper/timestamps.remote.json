@@ -3,5 +3,6 @@
 "test/convolution_mod.test.cpp": "2026-02-16 19:30:20 +0900",
 "test/convolution_xor.test.cpp": "2026-02-16 19:30:20 +0900",
 "test/dsu.test.cpp": "2026-02-19 19:12:55 +0900",
+"test/lazy_segtree.test.cpp": "2026-02-23 00:21:01 +0900",
 "test/segtree.test.cpp": "2026-02-19 19:35:50 +0900"
 }
