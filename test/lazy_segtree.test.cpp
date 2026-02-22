@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/range_add_range_min"
 
 #include <bits/stdc++.h>
-#include "../src/lazysegtree.hpp"
+#include "../src/lazy_segtree.hpp"
 
 using namespace std;
 using ll = long long;
