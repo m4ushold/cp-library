@@ -10,6 +10,9 @@ data:
       path: src/dsu.hpp
       title: src/dsu.hpp
     - icon: ':heavy_check_mark:'
+      path: src/lazy_segtree.hpp
+      title: src/lazy_segtree.hpp
+    - icon: ':heavy_check_mark:'
       path: src/segtree.hpp
       title: src/segtree.hpp
   - name: tools
@@ -32,6 +35,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/dsu.test.cpp
       title: test/dsu.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: test/lazy_segtree.test.cpp
+      title: test/lazy_segtree.test.cpp
     - icon: ':heavy_check_mark:'
       path: test/segtree.test.cpp
       title: test/segtree.test.cpp

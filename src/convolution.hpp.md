@@ -199,8 +199,8 @@ data:
   timestamp: '2026-02-16 19:30:20+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/convolution_mod.test.cpp
   - test/convolution_and.test.cpp
+  - test/convolution_mod.test.cpp
   - test/convolution_xor.test.cpp
 documentation_of: src/convolution.hpp
 layout: document
